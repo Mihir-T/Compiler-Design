@@ -1,0 +1,82 @@
+LEX CODE:
+%option noyywrap
+%{
+#include"while.tab.h"
+#include<stdio.h>
+#include<stdlib.h>
+%}
+%%
+"while" |
+WHILE {return WHILE;}
+"&&" |
+AND {return AND;}
+"||" |
+OR {return OR;}
+"!=" |
+NTEQ {return NTEQ;}
+"==" |
+EQ {return EQ;}
+">=" |
+GTEQ {return GTEQ;}
+"<=" |
+LTEQ {return LTEQ;}
+">" |
+GT {return GT;}
+"<" |
+LT {return LT;}
+
+[=,{},();] {return *yytext;}
+[ \t\n]+ ;
+[a-zA-Z][a-zA-Z0-9_]* {return ID;}
+[0-9]+ {return NUM;}
+. {printf("\n\nlex err");}
+%%
+
+YAAC CODE:
+%{
+#include<stdio.h>
+#include<conio.h>
+#include<stdlib.h>
+void yyerror(char *);
+int yylex();
+%}
+%token WHILE AND OR NTEQ EQ GTEQ LTEQ GT LT NUM ID A
+%%
+while: WHILE '(' cond ')' '{' A '}' {printf("Parsing successful");}
+;
+cond	: scond
+	| scond logop cond
+	;
+
+scond	: nid
+	| nid relop nid
+	;
+
+nid	: ID
+	| NUM
+	;
+
+logop	: AND
+	| OR
+	;
+
+relop	: NTEQ
+	| EQ
+	| LT
+	| LTEQ
+	| GT
+	| GTEQ
+	;
+
+%%
+
+void yyerror(char *s)
+{
+	printf("\nparsing err ");
+}
+
+int main()
+{
+	yyparse();
+	return 0;
+}

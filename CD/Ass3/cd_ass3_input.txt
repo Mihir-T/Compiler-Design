@@ -1,0 +1,7 @@
+arithmetic: + -
+relational: >=
+logical: &&
+delimiter: } }
+find: if while
+keyword: while
+constant: 3 8
